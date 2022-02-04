@@ -9,10 +9,11 @@
   </head>
   <body>
     <header>
-      <button>Alle</button> <button class="forretter">Forretter</button
-      ><button class="hovedretter">Hovedretter</button
-      ><button class="desserter">Dessert</button>
-      <button class="drikkevarer">Drikkevarer</button>
+      <button class="knap">Alle</button>
+      <button class="knap">Forretter</button>
+      <button class="knap">Hovedretter</button>
+      <button class="knap">Dessert</button>
+      <button class="knap">Drikkevarer</button>
     </header>
     <main></main>
     <template>
@@ -52,11 +53,6 @@
 
           main.appendChild(klon);
         });
-      }
-      document.querySelector(".forretter").addEventListener("click", forretter);
-
-      function forretter() {
-        console.log(forretter);
       }
 
       hentData();
