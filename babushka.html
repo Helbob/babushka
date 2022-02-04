@@ -8,7 +8,12 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header></header>
+    <header>
+      <button>Alle</button> <button class="forretter">Forretter</button
+      ><button class="hovedretter">Hovedretter</button
+      ><button class="desserter">Dessert</button>
+      <button class="drikkevarer">Drikkevarer</button>
+    </header>
     <main></main>
     <template>
       <div>
@@ -48,6 +53,12 @@
           main.appendChild(klon);
         });
       }
+      document.querySelector(".forretter").addEventListener("click", forretter);
+
+      function forretter() {
+        console.log(forretter);
+      }
+
       hentData();
     </script>
   </body>
