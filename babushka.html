@@ -9,9 +9,12 @@
   </head>
   <body>
     <header>
-      <h1>Alle</h1>
+      <div>
+        <p class="test">Bistro Babushka</p>
+      </div>
+      <h1>Menu</h1>
       <nav>
-        <button data-kategori="alle" class="valgt">Alle</button>
+        <button data-kategori="menu" class="valgt">Menu</button>
         <button data-kategori="forretter">Forretter</button>
         <button data-kategori="hovedretter">Hovedretter</button>
         <button data-kategori="desserter">Desserter</button>
@@ -52,7 +55,7 @@
 
     document.addEventListener("DOMContentLoaded", start);
     let mad;
-    let filter = "alle";
+    let filter = "menu";
     function start() {
       const filterKnapper = document.querySelectorAll("nav button");
       filterKnapper.forEach((knap) =>
@@ -82,7 +85,7 @@
       const template = document.querySelector("template").content;
       main.textContent = "";
       mad.forEach((ret) => {
-        if (filter == ret.kategori || filter == "alle") {
+        if (filter == ret.kategori || filter == "menu") {
           const klon = template.cloneNode(true);
           klon.querySelector(".billede").src =
             "img/" + ret.billednavn + "-md.jpg";
