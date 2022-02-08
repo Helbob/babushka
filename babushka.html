@@ -14,141 +14,132 @@
         <button data-kategori="alle" class="valgt">Alle</button>
         <button data-kategori="forretter">Forretter</button>
         <button data-kategori="hovedretter">Hovedretter</button>
-        <button data-kategori="desserter">Dessert</button>
+        <button data-kategori="desserter">Desserter</button>
         <button data-kategori="sideorders">Sideorders</button>
         <button data-kategori="drikkevarer">Drikkevarer</button>
       </nav>
     </header>
     <main></main>
     <template>
-<article>      
-  <img src="" alt="" class="billede" />
+      <article>
+        <img src="" alt="" class="billede" />
         <h2 class="navn"></h2>
         <p class="beskrivelse"></p>
         <p class="pris"></p>
-     </article>  
+      </article>
     </template>
 
-
     <section id="popup">
-      <div id="luk">&#x2715</div>
+      <div id="luk">&#x2715;</div>
       <article>
-        <img src="" alt="">
+        <img src="" alt="" />
         <section>
           <h2></h2>
-          <h3><span class="titel"></span></h3>
-          <p> <span class="langbeskrivelse"></span></p>
-          <p> <span class="oprindelsesregion"></span></p>
-          <p> <span class="prisen"></span></p>
+          <p><span class="langbeskrivelse"></span></p>
+          <p><span class="oprindelsesregion"></span></p>
+          <p><span class="prisen"></span></p>
         </section>
       </article>
     </section>
-
   </body>
 
-     <script>
-      
+  <script>
+    const header = document.querySelector("header h1");
+    const url = "https://babushka-dd8a.restdb.io/rest/menu";
+    const myHeaders = {
+      "x-apikey": "600ec2fb1346a1524ff12de4",
+    };
 
-      const header = document.querySelector("header h1");
-      const url = "https://babushka-dd8a.restdb.io/rest/menu";
-      const myHeaders = {
-        "x-apikey": "600ec2fb1346a1524ff12de4",
-      };
+    document.addEventListener("DOMContentLoaded", start);
+    let mad;
+    let filter = "alle";
+    function start() {
+      const filterKnapper = document.querySelectorAll("nav button");
+      filterKnapper.forEach((knap) =>
+        knap.addEventListener("click", filtrerMad)
+      );
+      loadJSON();
+    }
+    function filtrerMad() {
+      filter = this.dataset.kategori;
+      document.querySelector(".valgt").classList.remove("valgt");
+      this.classList.add("valgt");
+      visMad();
+      header.textContent = this.textContent;
+    }
 
-      document.addEventListener("DOMContentLoaded", start);
-      let mad;
-      let filter = "alle";
-      function start() {
-        const filterKnapper = document.querySelectorAll("nav button");
-        filterKnapper.forEach((knap) =>
-          knap.addEventListener("click", filtrerMad)
-        );
-        loadJSON();
-    
-      }
-      function filtrerMad() {
-        filter = this.dataset.kategori;
-        document.querySelector(".valgt").classList.remove("valgt");
-        this.classList.add("valgt");
-        visMad();
-        header.textContent = this.textContent;
-      }
+    async function loadJSON() {
+      const JSONData = await fetch(url, {
+        headers: myHeaders,
+      });
+      mad = await JSONData.json();
+      console.log("Kategori", mad);
+      visMad();
+    }
 
-      async function loadJSON() {
-        const JSONData = await fetch(url, {
-          headers: myHeaders,
-        });
-        mad = await JSONData.json();
-        console.log("Kategori", mad);
-        visMad();
-      }
-
-      function visMad() {
-        const main = document.querySelector("main");
-        const template = document.querySelector("template").content;
-        main.textContent = "";
-        mad.forEach((ret) => {
-          if (filter == ret.kategori || filter == "alle") {
-            const klon = template.cloneNode(true);
-            klon.querySelector(".billede").src =
-              "img/" + ret.billednavn + "-md.jpg";
-            klon.querySelector("h2").textContent = ret.navn;
-            klon.querySelector(".beskrivelse").textContent =
-              ret.kortbeskrivelse;
-            klon.querySelector(".pris").textContent = ret.pris + "kr";
-            klon
+    function visMad() {
+      const main = document.querySelector("main");
+      const template = document.querySelector("template").content;
+      main.textContent = "";
+      mad.forEach((ret) => {
+        if (filter == ret.kategori || filter == "alle") {
+          const klon = template.cloneNode(true);
+          klon.querySelector(".billede").src =
+            "img/" + ret.billednavn + "-md.jpg";
+          klon.querySelector("h2").textContent = ret.navn;
+          klon.querySelector(".beskrivelse").textContent = ret.kortbeskrivelse;
+          klon.querySelector(".pris").textContent = ret.pris + "kr";
+          klon
             .querySelector("article")
-            .addEventListener("click", () => visDetaljer(ret))
-            main.appendChild(klon);
-          }
-        });
-      }
+            .addEventListener("click", () => visDetaljer(ret));
+          main.appendChild(klon);
+        }
+      });
+    }
 
-    function visDetaljer(ret){
-    popup.style.display = "block";
-    popup.querySelector("img").src = "img/" + ret.billednavn + "-md.jpg";
-    popup.querySelector("h2").textContent = ret.navn;
-    popup.querySelector(".titel").textContent = ret.kategori;
-    popup.querySelector(".langbeskrivelse").textContent = ret.langbeskrivelse;
-    popup.querySelector(".oprindelsesregion").textContent = ret.oprindelsesregion;
-    popup.querySelector(".prisen").textContent = ret.pris;
-
-}
+    function visDetaljer(ret) {
+      popup.style.display = "block";
+      popup.querySelector("img").src = "img/" + ret.billednavn + "-md.jpg";
+      popup.querySelector("h2").textContent = ret.navn;
+      popup.querySelector(".langbeskrivelse").textContent = ret.langbeskrivelse;
+      popup.querySelector(".oprindelsesregion").textContent =
+        "Oprindelsesregion: " + ret.oprindelsesregion;
+      popup.querySelector(".prisen").textContent = "Pris: " + ret.pris + "kr.";
+    }
 
     document
       .querySelector("#luk")
       .addEventListener("click", () => (popup.style.display = "none"));
 
-      // const url = "https://babushka-dd8a.restdb.io/rest/menu";
-      // const options = {
-      //   headers: {
-      //     "x-apikey": "600ec2fb1346a1524ff12de4",
-      //   },
-      // };
+    // const url = "https://babushka-dd8a.restdb.io/rest/menu";
+    // const options = {
+    //   headers: {
+    //     "x-apikey": "600ec2fb1346a1524ff12de4",
+    //   },
+    // };
 
-      // async function hentData() {
-      //   const resspons = await fetch(url, options);
-      //   const json = await resspons.json();
-      //   vis(json);
-      // }
+    // async function hentData() {
+    //   const resspons = await fetch(url, options);
+    //   const json = await resspons.json();
+    //   vis(json);
+    // }
 
-      // const main = document.querySelector("main");
-      // const template = document.querySelector("template").content;
+    // const main = document.querySelector("main");
+    // const template = document.querySelector("template").content;
 
-      // function vis(json) {
-      //   console.log(json);
-      //   json.forEach((mad) => {
-      //     const klon = template.cloneNode(true);
-      //     klon.querySelector(".billede").src =
-      //       "img/" + mad.billednavn + "-md.jpg";
-      //     klon.querySelector("h2").textContent = mad.navn;
-      //     klon.querySelector(".beskrivelse").textContent = mad.kortbeskrivelse;
-      //     klon.querySelector(".pris").textContent = mad.pris + "kr";
+    // function vis(json) {
+    //   console.log(json);
+    //   json.forEach((mad) => {
+    //     const klon = template.cloneNode(true);
+    //     klon.querySelector(".billede").src =
+    //       "img/" + mad.billednavn + "-md.jpg";
+    //     klon.querySelector("h2").textContent = mad.navn;
+    //     klon.querySelector(".beskrivelse").textContent = mad.kortbeskrivelse;
+    //     klon.querySelector(".pris").textContent = mad.pris + "kr";
 
-      //     main.appendChild(klon);
-      //   });
+    //     main.appendChild(klon);
+    //   });
 
-      // hentData();
-    
-    </script>
+    // hentData();
+  </script>
 </html>
